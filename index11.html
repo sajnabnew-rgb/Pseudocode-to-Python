@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pseudocode to Python – IGCSE Computer Science</title>
+<style>
+:root{--bg:#eef2f7;--card:#fff;--ink:#16202e;--mut:#5a6779;--line:#c7d0dc;--acc:#0f766e;--ok:#15803d;--okb:#dcfce7;--bad:#dc2626;--badb:#fee2e2;--ps:#f8fafc;--kw:#7c3aed;--str:#b45309;--hlb:#fde68a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1520;--card:#18212f;--ink:#e8edf5;--mut:#9aa7bb;--line:#33405a;--acc:#14b8a6;--ok:#4ade80;--okb:#123524;--bad:#f87171;--badb:#3b1a1f;--ps:#111a27;--kw:#c4b5fd;--str:#fbbf24;--hlb:#5c4310;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Trebuchet MS",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1150px;margin:0 auto;padding:12px}
+h1{font-size:1.4rem;margin:0}.sub{color:var(--mut);font-size:.85rem}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:5px 12px;text-align:center;min-width:76px}
+.stat b{display:block;font-size:1.25rem}.stat span{font-size:.72rem;color:var(--mut)}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:700;font-size:.9rem;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.tabs{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.tier{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tl{display:inline-block;min-width:96px;font-weight:700;font-size:.8rem;padding:4px 0}.tl.tLA{color:#16a34a}.tl.tMA{color:#d97706}.tl.tHA{color:#dc2626}
+.tab{padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:.82rem;cursor:pointer}
+.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}.tab:disabled{opacity:.5;cursor:not-allowed}
+.tab.tLA{border-bottom:3px solid #16a34a}.tab.tMA{border-bottom:3px solid #d97706}.tab.tHA{border-bottom:3px solid #dc2626}
+.prog{height:12px;background:var(--line);border-radius:8px;overflow:hidden;margin:6px 0}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--ok));transition:width .45s}
+.lvl{margin:6px 0}.badge{display:inline-block;padding:1px 9px;border-radius:12px;background:var(--acc);color:#fff;font-weight:700;font-size:.78rem;margin-right:6px}
+.fb{min-height:50px;padding:10px 12px;border-radius:10px;background:var(--card);border:1px solid var(--line);margin:8px 0}
+.fb.ok{background:var(--okb);border-color:var(--ok)}.fb.bad{background:var(--badb);border-color:var(--bad)}
+.main{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:10px}
+.card h2{font-size:.9rem;margin:0 0 6px}
+.pseudo{background:var(--ps);border:1px solid var(--line);border-radius:10px;padding:10px;font:14px/2.1 ui-monospace,Menlo,Consolas,monospace;overflow-x:auto}
+.pl{white-space:pre;border-radius:5px;padding:0 4px;transition:background .15s}.pl.hl{background:var(--hlb);outline:2px solid var(--acc)}
+.kw{color:var(--kw);font-weight:700}.qs{color:var(--str)}
+.code{background:#111827;color:#e5e7eb;border-radius:10px;padding:10px;font:14px/2.1 ui-monospace,Menlo,Consolas,monospace;overflow-x:auto}
+.ln{white-space:pre}.no{color:#64748b;display:inline-block;width:2ch;margin-right:12px;text-align:right;font-weight:400}
+.gap{display:inline-block;border:2px dashed #38bdf8;border-radius:6px;padding:0 8px;color:#7dd3fc;cursor:pointer;line-height:1.6;white-space:pre;vertical-align:middle}
+.gap.full{min-width:min(100%,380px)}
+.gap.over{background:#164e63;border-style:solid}
+.gap.done{border:2px solid #4ade80;color:#86efac;background:transparent;cursor:default}
+.gap.shake{animation:sh .4s}.gap.pop{animation:pop .45s}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:7px 10px;border-radius:8px;background:var(--acc);color:#fff;font:600 .78rem ui-monospace,Menlo,Consolas,monospace;white-space:pre;cursor:grab;touch-action:none;user-select:none;border:2px solid transparent}
+.chip.sel{border-color:var(--ink);transform:scale(1.05)}.chip.shake{animation:sh .4s}
+.ghost{position:fixed;z-index:99;pointer-events:none;opacity:.92;transform:translate(-50%,-50%) rotate(-3deg);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+details{font-size:.85rem}summary{cursor:pointer;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:6px}td,th{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+td code{font:.78rem ui-monospace,Menlo,Consolas,monospace}
+@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes pop{40%{transform:scale(1.1)}}
+.mc ul{text-align:left;margin:8px 0;padding-left:20px}.mc li{margin:3px 0}.lnk{background:none;border:0;color:var(--acc);font-weight:700;text-decoration:underline;cursor:pointer;font-size:.95rem}
+.avs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}.av{font-size:1.5rem;width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:var(--card);cursor:pointer}.av.on{border-color:var(--acc);background:var(--okb);transform:scale(1.12)}
+.fact{font-size:.85rem;color:var(--mut)}.we{color:var(--bad);min-height:1.2em;margin:4px 0}.mc input,.mc select,.mc textarea{padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:.95rem;margin:2px}
+.dash{text-align:left}.dash p{margin:6px 0}.tw{overflow-x:auto}.st{width:100%;border-collapse:collapse;font-size:.8rem;margin:8px 0;text-align:left}.st td,.st th{border-bottom:1px solid var(--line);padding:2px 6px}.st td:nth-child(n+3),.st th:nth-child(n+3){white-space:nowrap}.st th{font-size:.72rem;color:var(--mut)}
+.cert{border:6px double var(--acc);padding:14px;border-radius:8px}.cn{font-size:1.7rem;font-weight:700;margin:4px 0}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:16px}
+.mc{background:var(--card);border-radius:16px;padding:20px;max-width:520px;max-height:92vh;overflow:auto;text-align:center}
+.mc:has(.dash),.mc:has(.cert){max-width:780px}
+.mc h2{margin:0 0 8px}.mc p{margin:6px 0}
+.cf{position:fixed;top:-14px;width:9px;height:14px;z-index:120;pointer-events:none;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(108vh) rotate(540deg)}}
+@media (max-width:860px){.main{grid-template-columns:1fr}.bankc{position:sticky;bottom:0;max-height:36vh;overflow:auto;z-index:5}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media print{:root:root:root:root{--bg:#fff;--card:#fff;--ink:#16202e;--mut:#5a6779;--line:#c7d0dc}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}html,body{background:#fff!important}.wrap,.cf{display:none!important}.modal{position:static!important;background:none!important;display:block!important}.mc{max-height:none!important}.np{display:none}}
+.main.nops{grid-template-columns:1fr}.main.nops .lc{display:none}.main.nops .rc{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:12px;align-items:start}
+.desc{margin:0 0 8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--bg);border-radius:6px;font-size:.92rem}.desc:empty{display:none}
+@media (max-width:860px){.main.nops .rc{grid-template-columns:1fr}}
+.ed{width:100%;box-sizing:border-box;background:transparent;color:#e5e7eb;border:2px dashed #38bdf8;border-radius:8px;padding:6px 8px;font:14px/1.9 ui-monospace,Menlo,Consolas,monospace;resize:vertical;tab-size:4;white-space:pre;overflow-x:auto}
+.ed:focus{outline:none;border-style:solid}.ed::placeholder{color:#64748b}
+.wres{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}.wres span{font:700 .78rem ui-monospace,Menlo,Consolas,monospace;padding:2px 7px;border-radius:6px;border:1px solid var(--line)}.wres .good{background:var(--okb);border-color:var(--ok)}.wres .wrongl{background:var(--badb);border-color:var(--bad)}
+.ty{display:inline-block;padding:1px 9px;border-radius:12px;border:1px solid var(--acc);color:var(--acc);font-weight:700;font-size:.78rem;margin-right:6px}
+.tin{font:inherit;line-height:1.5;background:#0b1220;color:#f1f5f9;border:2px dashed #38bdf8;border-radius:6px;padding:0 6px;vertical-align:middle;min-width:6ch}
+.tin:focus{outline:none;border-style:solid;background:#164e63}
+.tin.shake{animation:sh .4s}
+.tok{background:#0f766e;color:#fff;border:0;border-radius:6px;padding:0 8px;margin-left:4px;font:700 .8rem system-ui,sans-serif;line-height:1.9;cursor:pointer;vertical-align:middle}
+.qbox{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px;background:var(--card)}
+.qbox.done{border-color:var(--ok);background:var(--okb)}
+.qbox p{margin:0 0 6px;font-weight:700}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 12px;font:600 .85rem ui-monospace,Menlo,Consolas,monospace;cursor:pointer;white-space:pre}
+.opt.right{background:var(--ok);color:#fff;border-color:var(--ok)}.opt.shake{animation:sh .4s}.opt:disabled{cursor:default}
+.bl{cursor:pointer;border-radius:4px;padding:0 4px}.bl:hover{background:#1f2937}.bl.pick{outline:2px solid #fbbf24;background:#3b2f0b}.bl.fixed{color:#86efac;cursor:default}.bl.shake{animation:sh .4s}
+.ord{display:flex;align-items:center;gap:4px;background:#1f2937;border-radius:6px;margin:3px 0;padding:2px 4px;line-height:1.7}
+.ord .otx{white-space:pre;flex:1;overflow-x:auto}.ord.good{outline:2px solid #4ade80}.ord.wrongl{outline:2px solid #f87171}
+.ob{background:#374151;color:#fff;border:0;border-radius:5px;min-width:30px;height:28px;cursor:pointer;font:700 .85rem system-ui,sans-serif}
+.ob:disabled{opacity:.35;cursor:default}
+</style></head>
+<body><div class="wrap">
+<div class="top"><div><h1>Pseudocode to Python</h1><div class="sub">IGCSE Computer Science 4CP0: turn Pearson pseudocode into a Python program</div><div class="sub" id="who"></div></div>
+<div class="stats"><div class="stat"><b id="sc">0</b><span>Score</span></div><div class="stat"><b id="sk">0</b><span>Streak</span></div><div class="stat"><b id="ms">0</b><span>Mistakes</span></div><div class="stat"><b id="tm">0m 00s</b><span>Level time</span></div><button class="btn alt" id="rs">Reset level</button><button class="btn alt" onclick="summary()">Progress report</button><button class="btn alt" onclick="saveDlg()">Save progress</button><button class="btn alt" onclick="welcome()">Player</button><button class="btn alt" onclick="rules(false)">Rules</button></div></div>
+<div class="tabs" id="tabs"></div>
+<div class="prog"><i id="pb"></i></div>
+<div class="lvl"><span class="badge" id="bd"></span><span class="ty" id="ty"></span><b id="lt"></b>: <span id="goal"></span> <small id="pt" style="color:var(--mut)"></small></div>
+<div class="fb" id="fb"></div>
+<div class="main" id="main">
+<div class="lc"><div class="card"><h2 id="ph">Pseudocode</h2><div class="pseudo" id="ps"></div></div>
+<div class="card"><details><summary>Cheat sheet: pseudocode to Python</summary><table><tr><th>Pseudocode</th><th>Python</th></tr>
+<tr><td><code>RECEIVE x FROM (INTEGER) KEYBOARD</code></td><td><code>x = int(input("..."))</code></td></tr>
+<tr><td><code>RECEIVE name FROM (STRING) KEYBOARD</code></td><td><code>name = input("...")</code></td></tr>
+<tr><td><code>SEND ‘Hi’ TO DISPLAY</code></td><td><code>print("Hi")</code></td></tr>
+<tr><td><code>SET x TO 0</code></td><td><code>x = 0</code></td></tr>
+<tr><td><code>IF ... THEN</code> / <code>ELSE</code> / <code>END IF</code></td><td><code>if ...:</code> / <code>else:</code> / no END IF, the indentation ends the block</td></tr>
+<tr><td><code>ELSE</code> with an <code>IF</code> straight inside it</td><td><code>elif ...:</code></td></tr>
+<tr><td><code>IF</code> inside the <code>THEN</code> part</td><td>a nested <code>if</code>, indented 4 more spaces</td></tr>
+<tr><td><code>WHILE ... DO</code> / <code>END WHILE</code></td><td><code>while ...:</code> / no END WHILE</td></tr>
+<tr><td><code>=</code> in a condition</td><td><code>==</code></td></tr>
+<tr><td><code>&lt;&gt;</code></td><td><code>!=</code></td></tr>
+<tr><td><code>AND OR NOT</code></td><td><code>and or not</code></td></tr>
+<tr><td><code>MOD</code> / <code>DIV</code> / <code>^</code></td><td><code>%</code> / <code>//</code> / <code>**</code></td></tr>
+<tr><td><code>‘Total: ’ &amp; total</code></td><td><code>"Total: " + str(total)</code></td></tr>
+</table></details></div></div>
+<div class="rc"><div class="card"><h2 id="ch">Python program</h2><p class="desc" id="desc"></p><div class="code" id="code"></div></div>
+<div class="card bankc" id="bankc"><h2 id="bh"></h2><div id="chips"></div></div></div>
+</div></div><div class="modal" id="m"></div>
+<script>
+// ================= LEVELS =================
+// Every level has: lv (LA/MA/HA tier), ty (task type), t (title), ps (Pearson pseudocode lines).
+// ty 'drag'   : c = Python lines, {..} is a small gap, a line starting with ! is a whole-line gap. r = pseudocode line(s) for each gap ("4-5" = lines 4 to 5).
+//               x = wrong pieces in the bank. w = hints for wrong pieces: 'hint' shows in any gap, [n,'hint'] only in gap n (counting from 0).
+// ty 'type'   : c and r as above, but students type. a = accepted answers for each gap (text, or /regex/; null or missing means just the model answer). w = hints keyed by the tidied wrong answer.
+// ty 'write'  : students write the whole program. lines = [[code, indent level, pseudocode line]]. alt = {line number from 0: [other accepted versions]}.
+// ty 'predict': no pseudocode. py = Python program shown. q = questions: {q:question, a:right option, o:wrong options, e:explanation shown after a wrong answer}.
+// ty 'bug'    : no pseudocode. d = what the program should do. py = Python with mistakes. b = bugs: {l:Python line (from 0), a:fix, o:{wrong fix:hint}, e:why it was wrong}.
+// ty 'order'  : no pseudocode. d = what the program should do. lines = [[code, indent level]] in the right order. They are shown shuffled and all at indent 0.
+const TN={LA:'Beginner',MA:'Intermediate',HA:'Expert'};
+const TY={drag:'Drag and drop',type:'Type the code',write:'Write the program',predict:'Predict the output',bug:'Spot the bug',order:'Put lines in order'};
+const GOAL={drag:{LA:'Fill in the gaps to turn the pseudocode into Python.',MA:'Some whole lines are missing. Complete the program.',HA:'Build the whole program. Watch out for extra lines and indentation.'},
+ type:'Type the missing Python into each box, then press Enter or ✓.',
+ write:'Write the whole Python program for this pseudocode, then press Check. Use Tab to indent.',
+ predict:'Trace the Python program line by line and choose what happens.',
+ bug:'Some lines of this Python are wrong. Read what it should do, click a wrong line, then choose the fix.',
+ order:'Put the Python lines in order. Use ↑ ↓ to move a line and ← → to set its indentation, then press Check.'};
+const T=[
+{lv:'LA',ty:'drag',t:'Grade with if, elif and else',
+ ps:['RECEIVE mark FROM (INTEGER) KEYBOARD','IF mark >= 70 THEN','   SEND ‘Merit’ TO DISPLAY','ELSE','   IF mark >= 50 THEN','      SEND ‘Pass’ TO DISPLAY','   ELSE','      SEND ‘Fail’ TO DISPLAY','   END IF','END IF'],
+ c:['mark = {int(input("Enter mark: "))}','if {mark >= 70}:','    {print("Merit")}','{elif} {mark >= 50}:','    print("Pass")','{else}:','    print("Fail")'],
+ r:['1','2','3','4-5','5','7'],
+ x:['input("Enter mark: ")','mark > 70','SEND ‘Merit’ TO DISPLAY','print(Merit)','else if','if'],
+ w:{'mark > 70':[1,'The pseudocode says >= 70, so a mark of exactly 70 is a Merit.'],'SEND ‘Merit’ TO DISPLAY':'That is still pseudocode. SEND … TO DISPLAY becomes print(…) in Python.','print(Merit)':[2,'Text needs quotation marks: print("Merit"). Without them Python looks for a variable called Merit.'],'else if':[3,'Python joins ELSE and IF into one word: elif.'],'if':[3,'A new if would start a separate decision. An IF straight inside the ELSE becomes elif in Python.']}},
+{lv:'LA',ty:'type',t:'Odd or even: type the code',
+ ps:['RECEIVE number FROM (INTEGER) KEYBOARD','IF number MOD 2 = 0 THEN','   SEND ‘Even’ TO DISPLAY','ELSE','   SEND ‘Odd’ TO DISPLAY','END IF'],
+ c:['number = {int(input("Enter a number: "))}','if {number % 2 == 0}:','    {print("Even")}','{else}:','    print("Odd")'],
+ r:['1','2','3','4'],
+ a:[[/^int\(input\((".*")?\)\)$/],['number%2==0','0==number%2'],['print("Even")'],['else']],
+ w:{'number%2=0':'In a condition, = becomes == in Python.','number MOD 2==0':'MOD is pseudocode. The remainder operator in Python is %.','number MOD 2=0':'Two changes: MOD becomes % and = becomes ==.','input()':'The pseudocode says (INTEGER), so wrap input() in int().','print(Even)':'Text needs quotation marks: print("Even").'}},
+{lv:'LA',ty:'type',t:'Adult or child: if and else',
+ ps:['RECEIVE age FROM (INTEGER) KEYBOARD','IF age >= 18 THEN','   SEND ‘Adult’ TO DISPLAY','ELSE','   SEND ‘Child’ TO DISPLAY','END IF'],
+ c:['age = {int(input("Enter age: "))}','if {age >= 18}:','    {print("Adult")}','{else}:','    {print("Child")}'],
+ r:['1','2','3','4','5'],
+ a:[null,['age >= 18','18 <= age']]},
+{lv:'LA',ty:'type',t:'Teenager check: if with AND',
+ ps:['RECEIVE age FROM (INTEGER) KEYBOARD','IF age >= 13 AND age <= 19 THEN','   SEND ‘Teenager’ TO DISPLAY','ELSE','   SEND ‘Not a teenager’ TO DISPLAY','END IF'],
+ c:['age = int(input("Enter age: "))','if {age >= 13 and age <= 19}:','    print("Teenager")','{else}:','    {print("Not a teenager")}'],
+ r:['2','4','5'],
+ a:[['age >= 13 and age <= 19','age <= 19 and age >= 13','13 <= age <= 19','13 <= age and age <= 19']]},
+{lv:'LA',ty:'type',t:'Temperature: if and elif',
+ ps:['RECEIVE temp FROM (INTEGER) KEYBOARD','IF temp > 30 THEN','   SEND ‘Hot’ TO DISPLAY','ELSE','   IF temp > 15 THEN','      SEND ‘Warm’ TO DISPLAY','   ELSE','      SEND ‘Cold’ TO DISPLAY','   END IF','END IF'],
+ c:['temp = int(input("Enter temperature: "))','if {temp > 30}:','    print("Hot")','{elif temp > 15}:','    print("Warm")','{else}:','    {print("Cold")}'],
+ r:['2','4-5','7','8'],
+ a:[['temp > 30','30 < temp'],['elif temp > 15','elif 15 < temp']]},
+{lv:'LA',ty:'type',t:'Countdown: while loop',
+ ps:['SET count TO 5','WHILE count > 0 DO','   SEND count TO DISPLAY','   SET count TO count - 1','END WHILE','SEND ‘Lift off!’ TO DISPLAY'],
+ c:['count = {5}','while {count > 0}:','    {print(count)}','    count = {count - 1}','print("Lift off!")'],
+ r:['1','2','3','4'],
+ a:[null,['count > 0','0 < count']]},
+{lv:'LA',ty:'predict',t:'Ticket price: predict the output',
+ py:['age = int(input("Enter age: "))','if age < 12:','    print("Child ticket")','elif age >= 65:','    print("Senior ticket")','else:','    print("Adult ticket")'],
+ q:[{q:'The user enters 8. What is displayed?',a:'Child ticket',o:['Senior ticket','Adult ticket','Child ticket and Adult ticket'],e:'8 < 12 is True, so line 3 runs. elif and else are then skipped.'},
+    {q:'The user enters 12. What is displayed?',a:'Adult ticket',o:['Child ticket','Senior ticket','Nothing is displayed'],e:'12 < 12 is False and 12 >= 65 is False, so the else branch runs.'},
+    {q:'The user enters 65. What is displayed?',a:'Senior ticket',o:['Adult ticket','Child ticket','Senior ticket and Adult ticket'],e:'65 < 12 is False, then 65 >= 65 is True, so line 5 runs. Only one branch of an if / elif / else ever runs.'}]},
+{lv:'MA',ty:'drag',t:'Running total with while',
+ ps:['SET total TO 0','RECEIVE number FROM (INTEGER) KEYBOARD','WHILE number <> 0 DO','   SET total TO total + number','   RECEIVE number FROM (INTEGER) KEYBOARD','END WHILE','SEND ‘Total: ’ & total TO DISPLAY'],
+ c:['total = 0','number = int(input("Enter a number (0 to stop): "))','!while number != 0:','!    total = total + number','!    number = int(input("Enter a number (0 to stop): "))','!print("Total: " + str(total))'],
+ r:['3','4','5','7'],
+ x:['while number <> 0:','while number == 0:','    number = input("Enter a number (0 to stop): ")','print("Total: " & total)','print("Total: " + total)','END WHILE','    total = total + 1'],
+ w:{'while number <> 0:':[0,'<> is pseudocode for “not equal to”. In Python it is !=.'],'while number == 0:':[0,'The loop must keep going while the number is NOT 0, so use !=.'],'print("Total: " & total)':[3,'& joins text in pseudocode. Python uses +, and the number must be turned into text with str().'],'print("Total: " + total)':[3,'Python cannot join text and a number. Wrap the number in str(): str(total).'],'END WHILE':'Python has no END WHILE. The loop ends where the indentation stops.','    total = total + 1':[1,'That would count the numbers. The pseudocode adds the number itself: total + number.']}},
+{lv:'MA',ty:'type',t:'Weekend check: if with OR',
+ ps:['RECEIVE day FROM (STRING) KEYBOARD','IF day = ‘Saturday’ OR day = ‘Sunday’ THEN','   SEND ‘Weekend’ TO DISPLAY','ELSE','   SEND ‘Weekday’ TO DISPLAY','END IF'],
+ c:['!day = input("Enter the day: ")','!if day == "Saturday" or day == "Sunday":','    print("Weekend")','!else:','    print("Weekday")'],
+ r:['1','2','4'],
+ a:[null,['if day == "Saturday" or day == "Sunday":','if day == "Sunday" or day == "Saturday":']]},
+{lv:'MA',ty:'type',t:'Mark bands: elif with AND',
+ ps:['RECEIVE mark FROM (INTEGER) KEYBOARD','IF mark >= 0 AND mark < 50 THEN','   SEND ‘Fail’ TO DISPLAY','ELSE','   IF mark >= 50 AND mark <= 100 THEN','      SEND ‘Pass’ TO DISPLAY','   ELSE','      SEND ‘Invalid mark’ TO DISPLAY','   END IF','END IF'],
+ c:['!mark = int(input("Enter mark: "))','!if mark >= 0 and mark < 50:','    print("Fail")','!elif mark >= 50 and mark <= 100:','    print("Pass")','!else:','!    print("Invalid mark")'],
+ r:['1','2','4-5','7','8'],
+ a:[null,['if mark >= 0 and mark < 50:','if 0 <= mark < 50:','if mark < 50 and mark >= 0:'],['elif mark >= 50 and mark <= 100:','elif 50 <= mark <= 100:','elif mark <= 100 and mark >= 50:']]},
+{lv:'MA',ty:'type',t:'Discount: nested if',
+ ps:['RECEIVE member FROM (STRING) KEYBOARD','RECEIVE total FROM (INTEGER) KEYBOARD','IF member = ‘yes’ THEN','   IF total >= 100 THEN','      SEND ‘20% discount’ TO DISPLAY','   ELSE','      SEND ‘10% discount’ TO DISPLAY','   END IF','ELSE','   SEND ‘No discount’ TO DISPLAY','END IF'],
+ c:['member = input("Are you a member? ")','!total = int(input("Enter total: "))','!if member == "yes":','!    if total >= 100:','        print("20% discount")','!    else:','        print("10% discount")','!else:','    print("No discount")'],
+ r:['2','3','4','6','9']},
+{lv:'MA',ty:'type',t:'Age check: while with OR',
+ ps:['RECEIVE age FROM (INTEGER) KEYBOARD','WHILE age < 1 OR age > 120 DO','   SEND ‘Age must be 1 to 120’ TO DISPLAY','   RECEIVE age FROM (INTEGER) KEYBOARD','END WHILE','SEND ‘Age accepted’ TO DISPLAY'],
+ c:['age = int(input("Enter age: "))','!while age < 1 or age > 120:','!    print("Age must be 1 to 120")','!    age = int(input("Enter age: "))','!print("Age accepted")'],
+ r:['2','3','4','6'],
+ a:[['while age < 1 or age > 120:','while age > 120 or age < 1:','while not (1 <= age <= 120):']]},
+{lv:'MA',ty:'bug',t:'Mark check: spot the bugs',
+ d:'What the program should do: ask for a mark. While the mark is below 0 or above 100, show “Invalid, try again” and ask again. When the mark is valid, show “Mark saved”.',
+ py:['mark = int(input("Enter mark: "))','while mark < 0 and mark > 100:','    print("Invalid, try again")','mark = int(input("Enter mark: "))','print("Mark saved")'],
+ b:[{l:1,a:'while mark < 0 or mark > 100:',o:{'while mark < 0 OR mark > 100:':'Python keywords are lower-case: or, not OR.','while mark >= 0 or mark <= 100:':'Every mark is either >= 0 or <= 100, so this loop would never end.','while mark < 0 or mark > 100 DO':'DO is not Python. A Python while line ends with a colon.'},e:'The task says below 0 OR above 100. No mark can be below 0 AND above 100 at the same time, so with and the loop would never run.'},
+    {l:3,a:'    mark = int(input("Enter mark: "))',o:{'    mark = input("Enter mark: ")':'The mark is a number, so keep int().','mark = input("Enter mark: ")':'This needs int() and it must be indented inside the loop.'},e:'Asking again must happen inside the loop, so it needs indenting. Without it, an invalid mark would make the loop run for ever.'}]},
+{lv:'MA',ty:'predict',t:'Trace a while loop',
+ py:['count = 1','total = 0','while count <= 4:','    total = total + count','    count = count + 1','print(total)'],
+ q:[{q:'How many times does the loop body (lines 4 and 5) run?',a:'4',o:['3','5','1'],e:'count takes the values 1, 2, 3 and 4. When count becomes 5, count <= 4 is False and the loop stops.'},
+    {q:'What is displayed?',a:'10',o:['4','15','6'],e:'total = 1 + 2 + 3 + 4 = 10.'},
+    {q:'What is the value of count after the loop ends?',a:'5',o:['4','1','0'],e:'The loop only stops when count <= 4 is False, which first happens when count is 5.'}]},
+{lv:'HA',ty:'drag',t:'Ride check with a nested if',
+ ps:['RECEIVE age FROM (INTEGER) KEYBOARD','RECEIVE height FROM (INTEGER) KEYBOARD','IF age >= 10 THEN','   IF height >= 140 THEN','      SEND ‘Enjoy the ride’ TO DISPLAY','   ELSE','      SEND ‘Too short’ TO DISPLAY','   END IF','ELSE','   SEND ‘Too young’ TO DISPLAY','END IF'],
+ c:['!age = int(input("Enter age: "))','!height = int(input("Enter height in cm: "))','!if age >= 10:','!    if height >= 140:','!        print("Enjoy the ride")','!    else:','!        print("Too short")','!else:','!    print("Too young")'],
+ r:['1','2','3','4','5','6','7','9','10'],
+ x:['    elif height >= 140:','IF age >= 10 THEN','    END IF','height = input("Enter height in cm: ")','        else:','    print("Enjoy the ride")'],
+ w:{'    elif height >= 140:':[3,'The height is only checked when the age test passes. An IF inside the THEN part is a nested if, not elif.'],'IF age >= 10 THEN':'That is still pseudocode. In Python: if age >= 10: (lower-case if, no THEN, and a colon at the end).','    END IF':'Python has no END IF. The block ends where the indentation stops.'}},
+{lv:'HA',ty:'write',t:'Password: while with AND',
+ ps:['SET attempts TO 1','RECEIVE guess FROM (STRING) KEYBOARD','WHILE guess <> ‘python’ AND attempts < 3 DO','   SEND ‘Try again’ TO DISPLAY','   RECEIVE guess FROM (STRING) KEYBOARD','   SET attempts TO attempts + 1','END WHILE','IF guess = ‘python’ THEN','   SEND ‘Access granted’ TO DISPLAY','ELSE','   SEND ‘Locked out’ TO DISPLAY','END IF'],
+ lines:[['attempts = 1',0,'1'],['guess = input("Enter password: ")',0,'2'],['while guess != "python" and attempts < 3:',0,'3'],['print("Try again")',1,'4'],['guess = input("Enter password: ")',1,'5'],['attempts = attempts + 1',1,'6'],['if guess == "python":',0,'8'],['print("Access granted")',1,'9'],['else:',0,'10'],['print("Locked out")',1,'11']],
+ alt:{2:['while attempts < 3 and guess != "python":'],5:['attempts += 1']}},
+{lv:'HA',ty:'write',t:'Theme park: nested if with OR',
+ ps:['RECEIVE age FROM (INTEGER) KEYBOARD','RECEIVE adult FROM (STRING) KEYBOARD','RECEIVE height FROM (INTEGER) KEYBOARD','IF age >= 12 OR adult = ‘yes’ THEN','   IF height >= 120 THEN','      SEND ‘Enjoy the ride’ TO DISPLAY','   ELSE','      SEND ‘Too short’ TO DISPLAY','   END IF','ELSE','   SEND ‘You need an adult with you’ TO DISPLAY','END IF'],
+ lines:[['age = int(input("Enter age: "))',0,'1'],['adult = input("Is an adult with you? ")',0,'2'],['height = int(input("Enter height in cm: "))',0,'3'],['if age >= 12 or adult == "yes":',0,'4'],['if height >= 120:',1,'5'],['print("Enjoy the ride")',2,'6'],['else:',1,'7'],['print("Too short")',2,'8'],['else:',0,'10'],['print("You need an adult with you")',1,'11']],
+ alt:{3:['if adult == "yes" or age >= 12:']}},
+{lv:'HA',ty:'write',t:'Pass and fail counter: if inside while',
+ ps:['SET passes TO 0','SET fails TO 0','RECEIVE mark FROM (INTEGER) KEYBOARD','WHILE mark <> -1 DO','   IF mark >= 50 THEN','      SET passes TO passes + 1','   ELSE','      SET fails TO fails + 1','   END IF','   RECEIVE mark FROM (INTEGER) KEYBOARD','END WHILE','SEND ‘Passes: ’ & passes TO DISPLAY','SEND ‘Fails: ’ & fails TO DISPLAY'],
+ lines:[['passes = 0',0,'1'],['fails = 0',0,'2'],['mark = int(input("Enter mark (-1 to stop): "))',0,'3'],['while mark != -1:',0,'4'],['if mark >= 50:',1,'5'],['passes = passes + 1',2,'6'],['else:',1,'7'],['fails = fails + 1',2,'8'],['mark = int(input("Enter mark (-1 to stop): "))',1,'10'],['print("Passes: " + str(passes))',0,'12'],['print("Fails: " + str(fails))',0,'13']],
+ alt:{5:['passes += 1'],7:['fails += 1'],9:['print("Passes:", passes)'],10:['print("Fails:", fails)']}},
+{lv:'HA',ty:'write',t:'Ticket prices: elif with OR and AND',
+ ps:['RECEIVE age FROM (INTEGER) KEYBOARD','RECEIVE day FROM (STRING) KEYBOARD','IF age < 12 OR age >= 65 THEN','   SEND ‘Price: 5’ TO DISPLAY','ELSE','   IF day = ‘Tuesday’ AND age >= 18 THEN','      SEND ‘Price: 7’ TO DISPLAY','   ELSE','      SEND ‘Price: 10’ TO DISPLAY','   END IF','END IF'],
+ lines:[['age = int(input("Enter age: "))',0,'1'],['day = input("Enter the day: ")',0,'2'],['if age < 12 or age >= 65:',0,'3'],['print("Price: 5")',1,'4'],['elif day == "Tuesday" and age >= 18:',0,'5-6'],['print("Price: 7")',1,'7'],['else:',0,'8'],['print("Price: 10")',1,'9']],
+ alt:{2:['if age >= 65 or age < 12:'],4:['elif age >= 18 and day == "Tuesday":']}},
+{lv:'HA',ty:'order',t:'Login: put the lines in order',
+ d:'What the program should do: ask for a username, then a password. If the username is admin, check the password: 1234 shows “Welcome” and anything else shows “Wrong password”. Any other username shows “Unknown user”.',
+ lines:[['username = input("Username: ")',0],['password = input("Password: ")',0],['if username == "admin":',0],['if password == "1234":',1],['print("Welcome")',2],['else:',1],['print("Wrong password")',2],['else:',0],['print("Unknown user")',1]]}
+];
+// ================= STATE =================
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'),J=s=>esc(JSON.stringify(s));
+let WR=[],ti=0,score=0,mist=0,streak=0,unlocked=0,done={},tries={},bank=[],SL=[],sel=null,locked=false,drag=null,startScore=0,pick=null,ORD=[],checks=0,
+ att=T.map(()=>0),mm=T.map(()=>0),best=T.map(()=>null),tim=T.map(()=>0),pon=T.map(()=>0),pname='',pyear='',pav='🤖',curLi=0,t0=Date.now();
+const SK='pseudoPythonV1',KEY=k=>k.lv+':'+k.t;
+const data=()=>({u:unlocked,s:score,a:att,m:mm,b:best,t:tim,p:pon,k:T.map(KEY),n:pname,y:pyear,v:pav});
+function save(){try{localStorage.setItem(SK,JSON.stringify(data()))}catch(_){}}
+function load(){try{apply(JSON.parse(localStorage.getItem(SK)||'null'))}catch(_){}}
+function apply(d){if(!d||!Array.isArray(d.a)||!Array.isArray(d.k)||d.k.length!=d.a.length)return false;
+ pname=String(d.n||'').slice(0,40);pyear=String(d.y||'').slice(0,12);pav=String(d.v||'🤖').slice(0,4);score=d.s|0;
+ const now=T.map(KEY);d.k.forEach((key,i)=>{const j=now.indexOf(key);if(j<0)return;att[j]=d.a[i]|0;mm[j]=d.m&&d.m[i]|0;best[j]=d.b&&d.b[i]!=null?+d.b[i]||0:null;tim[j]=d.t?+d.t[i]||0:0;pon[j]=d.p?d.p[i]|0:0});
+ // levels stay unlocked up to the first one not yet passed, so new levels added later are played in order
+ const passed=new Set(d.k.slice(0,d.u|0));let u=0;while(u<T.length&&passed.has(now[u]))u++;unlocked=u;return true}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const KW=/\b(IF|THEN|ELSE|END|WHILE|DO|SET|TO|RECEIVE|FROM|KEYBOARD|SEND|DISPLAY|AND|OR|NOT|MOD|DIV|INTEGER|STRING|REAL|BOOLEAN|CHARACTER)\b/g;
+const pretty=l=>esc(l).split(/(‘[^’]*’)/).map(q=>q[0]=='‘'?`<span class="qs">${q}</span>`:q.replace(KW,'<span class="kw">$1</span>')).join('');
+const lines=ref=>{const [a,b]=String(ref).split('-').map(Number);const o=[];for(let n=a;n<=(b||a);n++)o.push(n);return o};
+const no=i=>`<span class="no">${i+1}</span>`;
+// ================= BUILD A LEVEL =================
+function build(){tick();curLi=ti;const k=T[ti];done={};tries={};mist=0;streak=0;locked=false;sel=null;pick=null;checks=0;startScore=score;SL=[];bank=[];
+const nops=!k.ps;$('#main').classList.toggle('nops',nops);$('#desc').textContent=k.d||'';
+ $('#ps').innerHTML=(k.ps||[]).map((l,i)=>`<div class="pl" data-n="${i+1}">${no(i)}${pretty(l)}</div>`).join('');
+ $('#lt').textContent=`Level ${ti+1}, ${k.t}`;$('#bd').textContent=TN[k.lv];$('#ty').textContent=TY[k.ty];
+ $('#goal').textContent=k.ty=='drag'?GOAL.drag[k.lv]:GOAL[k.ty];
+ $('#ph').textContent={drag:'Pseudocode (hover a gap to see its line)',type:'Pseudocode (click a box to see its line)',write:'Pseudocode',bug:'Pseudocode (hover a Python line to see its match)',predict:'Pseudocode',order:'Pseudocode'}[k.ty];
+ ({drag:bDrag,type:bType,write:bWrite,predict:bPredict,bug:bBug,order:bOrder})[k.ty](k);render()}
+function gapsHTML(k,mk){let ri=0;return k.c.map((ln,i)=>{const full=ln[0]=='!';if(full)ln=ln.slice(1);
+  const g=a=>{const id='s'+SL.length,r=k.r[ri++];SL.push({id,a,r,n:SL.length,full});return mk(id,a,r,full)};
+  return `<div class="ln">${no(i)}${full?g(ln):ln.split(/(\{[^}]*\})/).map(q=>q[0]=='{'?g(q.slice(1,-1)):esc(q)).join('')}</div>`}).join('')}
+function bDrag(k){$('#ch').textContent='Python program';$('#bankc').style.display='';
+ $('#code').innerHTML=gapsHTML(k,(id,a,r,full)=>`<span class="gap${full?' full':''}" data-slot="${id}" data-ref="${r}">${full?'drop a line here':'&nbsp;&nbsp;?&nbsp;&nbsp;'}</span>`);
+ bank=shuffle(SL.map(q=>q.a).concat(k.x).map((t,i)=>({id:'c'+i,t})));
+ fb('','Drag a piece of Python into a dashed gap (or tap a piece, then tap a gap). Hover a gap to see which pseudocode line it matches.')}
+function bType(k){$('#ch').textContent='Python program: type into the boxes';$('#bankc').style.display='none';
+ $('#code').innerHTML=gapsHTML(k,(id,a,r,full)=>{const sp=full?a.match(/^ */)[0]:'';return `${sp}<span data-slot="${id}" data-ref="${r}"><input class="tin" data-tin="${id}" size="${full?Math.max(30,a.trim().length+6):a.length>16?34:16}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Missing Python"><button class="tok" data-chk="${id}">✓</button></span>`});
+ fb('',`Type the Python that matches the pseudocode, then press Enter or ✓. ${SL.some(s=>s.full)?'Whole lines need their colon : where Python needs one, but the indentation is done for you. ':''}Extra spaces and \' or " quotes are fine. Click a box to see its pseudocode line.`)}
+function bWrite(k){$('#ch').textContent='Python program: write it all';$('#bankc').style.display='';
+ $('#code').innerHTML=`<textarea id="ed" class="ed" rows="${Math.max(12,k.lines.length+3)}" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Your Python program" placeholder="Write your Python here.&#10;Press Tab to indent, Shift+Tab to un-indent."></textarea>`;
+ k.lines.forEach((l,i)=>SL.push({id:'w'+i,n:i}));WR=[];
+ fb('',`Write the whole program. It needs ${k.lines.length} lines (blank lines do not count). Press Tab to indent 4 spaces. Extra spaces and \' or " quotes are fine.`)}
+function bPredict(k){$('#ch').textContent='Python program';$('#bankc').style.display='';
+ $('#code').innerHTML=k.py.map((l,i)=>`<div class="ln">${no(i)}${esc(l)}</div>`).join('');
+ k.q.forEach((q,i)=>SL.push({id:'q'+i,n:i,o:shuffle([q.a].concat(q.o))}));
+ fb('','Read the program line by line, as the computer would. Then answer each question.')}
+function bBug(k){$('#ch').textContent='Python program with bugs: click a wrong line';$('#bankc').style.display='';
+ ORD=k.py.slice();k.b.forEach((b,i)=>SL.push({id:'b'+i,n:i,b}));
+ fb('',`This Python has ${k.b.length} bug${k.b.length>1?'s':''}. Read what the program should do, then click a line that is wrong.`)}
+function bOrder(k){$('#ch').textContent='Python program: put the lines in order';$('#bankc').style.display='';
+ ORD=shuffle(k.lines.map((l,i)=>({t:l[0],ind:0,id:i})));while(k.lines.length>1&&ORD.every((o,i)=>o.t==k.lines[i][0]))shuffle(ORD);
+ k.lines.forEach((l,i)=>SL.push({id:'o'+i,n:i}));
+ fb('','Put the lines in the right order for the task, and indent each line. Press Check when you are ready.')}
+// ================= DRAW =================
+function render(){const k=T[ti],d=Object.keys(done).length,unit={drag:'gaps',type:'boxes',write:'lines',predict:'questions',bug:'bugs',order:'lines'}[k.ty];
+ $('#sc').textContent=score;$('#sk').textContent=streak;$('#ms').textContent=mist;who();
+ $('#pb').style.width=d/SL.length*100+'%';$('#pt').textContent=`(${d} of ${SL.length} ${unit} ${k.ty=='bug'?'fixed':k.ty=='order'?'in the right place':k.ty=='write'?'correct':'complete'})`;
+ if(k.ty=='drag'){$('#bh').textContent=`Code bank (${bank.length} left)`;$('#chips').innerHTML=`<div class="chips">${bank.map(c=>`<div class="chip${sel==c.id?' sel':''}" data-cid="${c.id}">${esc(c.t)}</div>`).join('')}</div>`}
+ if(k.ty=='write'){$('#bh').textContent='Check your program';$('#chips').innerHTML=`<p class="fact">Your program should have ${k.lines.length} lines. Each line is checked against the pseudocode, including its indentation.</p><button class="btn" id="chkwr" ${locked?'disabled':''}>Check my program</button>${WR.length?`<div class="wres">${WR.map((r,i)=>`<span class="${r}" title="Line ${i+1}">${i+1} ${r=='good'?'✓':r=='wrongl'?'✗':'?'}</span>`).join('')}</div>`:''}`}
+ if(k.ty=='predict'){$('#bh').textContent='Questions';$('#chips').innerHTML=SL.map((s,i)=>{const q=k.q[i],ok=done[s.id];return `<div class="qbox${ok?' done':''}"><p>${i+1}. ${esc(q.q)}</p><div class="opts">${s.o.map((o,j)=>`<button class="opt${ok&&o==q.a?' right':''}" data-q="${i}" data-o="${j}" ${ok||locked?'disabled':''}>${esc(o)}</button>`).join('')}</div></div>`}).join('')}
+ if(k.ty=='bug'){$('#code').innerHTML=ORD.map((l,i)=>{const b=SL.find(s=>s.b.l==i),fx=b&&done[b.id];return `<div class="ln bl${fx?' fixed':''}${pick==i?' pick':''}" data-bl="${i}">${no(i)}${esc(l)}${fx?'  ✓':''}</div>`}).join('');
+  const s=pick==null?null:SL.find(x=>x.b.l==pick);
+  $('#bh').textContent=s?`Choose the fix for line ${pick+1}`:`Bugs fixed: ${d} of ${SL.length}`;
+  $('#chips').innerHTML=s?`<div class="opts" style="flex-direction:column;align-items:flex-start">${(s.o||(s.o=shuffle([s.b.a].concat(Object.keys(s.b.o))))).map((o,j)=>`<button class="opt" data-fix="${j}">${esc(o)}</button>`).join('')}</div>`:'<p class="fact">Click the line in the Python program that is wrong.</p>'}
+ if(k.ty=='order'){$('#code').innerHTML=ORD.map((o,i)=>`<div class="ord${o.st?' '+o.st:''}">${no(i)}<button class="ob" data-mv="${i},-1" ${i==0||locked?'disabled':''} aria-label="Move up">↑</button><button class="ob" data-mv="${i},1" ${i==ORD.length-1||locked?'disabled':''} aria-label="Move down">↓</button><span class="otx">${'    '.repeat(o.ind)}${esc(o.t)}</span><button class="ob" data-in="${i},-1" ${o.ind==0||locked?'disabled':''} aria-label="Indent less">←</button><button class="ob" data-in="${i},1" ${o.ind==3||locked?'disabled':''} aria-label="Indent more">→</button></div>`).join('');
+  $('#bh').textContent='When you are ready';$('#chips').innerHTML=`<p class="fact">Each ← → step is 4 spaces of indentation. Lines in the right place turn green after you press Check.</p><button class="btn" id="chkord" ${locked?'disabled':''}>Check my order</button>`}
+ $('#tabs').innerHTML=['LA','MA','HA'].map(t=>`<div class="tier"><span class="tl t${t}">${TN[t]}</span>${T.map((k,i)=>k.lv!=t?'':`<button class="tab t${k.lv}${i==ti?' on':''}" ${i>unlocked?'disabled':''} onclick="go(${i})" title="${TY[k.ty]}">${i>unlocked?'🔒':i<unlocked?'✓ ':''}${i+1}</button>`).join('')}</div>`).join('')}
+function fb(k,h){const f=$('#fb');f.className='fb '+k;f.innerHTML=h}
+function hl(ref){document.querySelectorAll('.pl.hl').forEach(x=>x.classList.remove('hl'));if(ref)lines(ref).forEach(n=>{const e=$(`.pl[data-n="${n}"]`);if(e)e.classList.add('hl')})}
+function shake(el){if(!el)return;el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}
+// ================= RIGHT AND WRONG =================
+function right(msg){streak++;const p=10+Math.min(streak-1,4)*2;score+=p;fb('ok',`${pav} ${['Nice one!','Correct!','Spot on!','Great thinking!'][Math.floor(Math.random()*4)]} +${p} points${streak>1?` (streak bonus ×${streak})`:''}${msg?' '+msg:''}`)}
+function wrong(msg,el){mist++;streak=0;score=Math.max(0,score-3);shake(el);fb('bad',`Not quite, −3 points. ${msg}`)}
+function after(){render();if(Object.keys(done).length==SL.length)finish()}
+function lineHint(k,r){return `Look at the highlighted pseudocode: “${esc(k.ps[lines(r)[0]-1].trim())}”. How would you write that in Python?`}
+// --- drag and drop ---
+function why(ch,sl,k){const t=ch.t,a=sl.a;
+ if(t.trim()===a.trim())return 'Right code, wrong indentation. Lines inside an if, else or while are indented 4 spaces for each level; the others are not.';
+ const h=k.w&&k.w[t];if(typeof h=='string')return h;if(h&&h[0]==sl.n)return h[1];
+ if(/int\(input/.test(a)&&/input\(/.test(t)&&!/int\(/.test(t))return 'input() always gives text. The pseudocode says (INTEGER), so wrap it in int().';
+ if(/\b(THEN|DO|SEND|RECEIVE|SET|END)\b|<>/.test(t))return 'That is still pseudocode. Translate it into Python.';
+ return lineHint(k,sl.r)}
+function attempt(cid,sid){const ch=bank.find(c=>c.id==cid),sl=SL.find(q=>q.id==sid);if(!ch||!sl||done[sid]||locked)return;sel=null;
+ const g=$(`[data-slot="${sid}"]`);hl(sl.r);
+ if(ch.t===sl.a){done[sid]=1;bank=bank.filter(c=>c!==ch);g.textContent=sl.a;g.classList.add('done','pop');right()}
+ else{tries[sid]=(tries[sid]||0)+1;let m=why(ch,sl,T[ti]);if(tries[sid]>=2)m+=` Clue: the answer starts with “${esc(sl.a.trim().slice(0,7))}”.`;
+  wrong(m,g);const el=$(`.chip[data-cid="${cid}"]`);render();shake($(`.chip[data-cid="${cid}"]`));shake($(`[data-slot="${sid}"]`));return}
+ after()}
+// --- type the code ---
+// tidy an answer: curly or single quotes become ", spaces are removed except between two words (so "and" stays a word),
+// the prompt inside input("...") is ignored, and (for small gaps) a final colon is dropped
+function tidy(s,keepColon){s=String(s).replace(/[‘’“”']/g,'"').trim();if(!keepColon)s=s.replace(/:\s*$/,'').trim();
+ let o='',q=false;const W=/[A-Za-z0-9_]/;
+ for(let i=0;i<s.length;i++){const c=s[i];if(c=='"'){q=!q;o+=c;continue}if(q){o+=c;continue}
+  if(/\s/.test(c)){let j=i;while(j+1<s.length&&/\s/.test(s[j+1]))j++;const p=o[o.length-1],n=s[j+1];if(p&&n&&W.test(p)&&W.test(n))o+=' ';i=j;continue}
+  o+=c}
+ return o.replace(/input\("[^"]*"\)/g,'input()')}
+function typeHint(v,sl,k){const h=k.w&&k.w[v];if(h)return h;const a=sl.a.trim(),strip=x=>x.replace(/"[^"]*"/g,'""');const vs=strip(v),as=strip(a);
+ if(/\b(THEN|DO|SEND|RECEIVE|SET|DISPLAY|KEYBOARD|END)\b/.test(vs))return 'That is still pseudocode. Translate it into Python.';
+ if(/<>/.test(vs))return '<> is pseudocode. In Python “not equal to” is !=.';
+ if(/\bMOD\b/.test(vs))return 'MOD is pseudocode. The remainder operator in Python is %.';
+ if(/&/.test(vs))return '& joins text in pseudocode. In Python use +, and turn numbers into text with str().';
+ if(/\b(AND|OR|NOT)\b/.test(vs))return 'Boolean operators are lower-case in Python: and, or, not.';
+ if(/^(IF|If|ELSE|Else|ELIF|Elif|WHILE|While|PRINT|Print|INPUT|Input|INT|Int)\b/.test(vs))return 'Python keywords are lower-case, for example if, else, elif, while, print and input.';
+ if(/else ?if/i.test(vs))return 'Python joins ELSE and IF into one word: elif.';
+ if(/^if\b/.test(as)&&/^elif\b/.test(vs))return 'This IF is inside the THEN part of another IF, so it is a nested if (indented), not elif.';
+ if(/^elif\b/.test(as)&&/^if\b/.test(vs))return 'An IF straight inside an ELSE becomes elif in Python. A new if would start a separate decision.';
+ if(/==/.test(as)&&/(^|[^=!<>])=($|[^=])/.test(vs))return 'A single = sets a value. To compare in a condition, use ==.';
+ if(/\band\b/.test(as)&&!/\band\b/.test(vs)&&/\bor\b/.test(vs))return 'The pseudocode says AND, so use and. With or only ONE of the conditions needs to be true.';
+ if(/\bor\b/.test(as)&&!/\bor\b/.test(vs)&&/\band\b/.test(vs))return 'The pseudocode says OR, so use or. With and BOTH conditions would need to be true.';
+ if(/\b(and|or)(""|\d|[<>=!])/.test(vs)||/\b(and|or) (""|\d)/.test(vs))return 'Each side of and / or needs its own full comparison, for example day == "Saturday" or day == "Sunday". On its own, "Sunday" always counts as True.';
+ if(sl.full&&/:$/.test(a)&&!/:$/.test(v))return 'This line must end with a colon : (lines starting if, elif, else and while always do).';
+ if(/^print\("/.test(a)&&/^print\([^"]/.test(v))return 'Text needs quotation marks, for example print("Hello").';
+ if(/^print\([^"]/.test(a)&&/^print\("/.test(v))return 'With quotation marks it prints the word itself. Leave them out to print the value stored in the variable.';
+ if(/str\(/.test(a)&&/\+/.test(v)&&!/str\(/.test(v)&&!/,/.test(v))return 'Python cannot join text and a number with +. Turn the number into text with str(...).';
+ if(/int\(input/.test(a)&&/input\(/.test(v)&&!/int\(/.test(v))return 'The pseudocode says (INTEGER), so wrap input() in int().';
+ if(/input\(/.test(a)&&!/int\(/.test(a)&&/int\(input/.test(v))return 'The pseudocode says (STRING), so the input is text. Do not wrap it in int().';
+ const ka=as.split(/[^A-Za-z_]/)[0],kv=vs.split(/[^A-Za-z_]/)[0];
+ if(['if','elif','else','while'].includes(ka)&&kv!==ka)return `This line should start with ${ka}${kv?`, not ${kv}`:''}.${ka=='while'?' The pseudocode repeats (WHILE … DO), so it needs a loop.':''}`;
+ return lineHint(k,sl.r)}
+function checkType(sid){const k=T[ti],sl=SL.find(q=>q.id==sid);if(!sl||done[sid]||locked)return;const inp=$(`[data-tin="${sid}"]`),raw=inp.value;hl(sl.r);
+ if(!raw.trim()){fb('','Type your answer in the box first.');inp.focus();return}
+ const v=tidy(raw,sl.full),ok=((k.a&&k.a[sl.n])||[sl.a]).some(x=>x instanceof RegExp?x.test(v):tidy(x,sl.full)==v);
+ if(ok){done[sid]=1;const g=$(`[data-slot="${sid}"]`);g.innerHTML=`<span class="gap done pop">${esc(sl.a.trim())}</span>`;right();after();const nx=$('.tin');if(nx)nx.focus()}
+ else{tries[sid]=(tries[sid]||0)+1;let m=typeHint(v,sl,k);if(tries[sid]>=2)m+=` Clue: the answer starts with “${esc(sl.a.trim().slice(0,7))}”.`;wrong(m,inp);render()}}
+// --- write the program ---
+// every line is compared with the model answer (or an accepted alternative) and its indentation level.
+// Indentation levels come from the student's own spacing, so 2 or 4 spaces both work if used consistently.
+function okLine(k,i,got){const L=k.lines[i];return [L[0]].concat((k.alt&&k.alt[i])||[]).some(x=>tidy(x,true)==tidy(got,true))}
+function checkWrite(){const k=T[ti],ed=$('#ed');if(locked||!ed)return;
+ const L=ed.value.replace(/\t/g,'    ').split('\n').filter(l=>l.trim()&&!l.trim().startsWith('#'));
+ if(!L.length){fb('','Write your program in the box first.');ed.focus();return}
+ checks++;const widths=[...new Set(L.map(l=>l.match(/^ */)[0].length))].sort((a,b)=>a-b),lvl=l=>widths.indexOf(l.match(/^ */)[0].length);
+ done={};WR=k.lines.map((x,i)=>{if(i>=L.length)return 'miss';const ok=okLine(k,i,L[i])&&lvl(L[i])==x[1];if(ok)done[SL[i].id]=1;return ok?'good':'wrongl'});
+ if(WR.every(r=>r=='good')&&L.length==k.lines.length){fb('ok',`${pav} Your program is correct, every line and every indent!`);streak++;score+=10*k.lines.length;after();return}
+ const f=WR.findIndex(r=>r!='good');let m;
+ if(f<0){m=`Every line is right, but your program has ${L.length-k.lines.length} extra line${L.length-k.lines.length>1?'s':''} at the end. Remove ${L.length-k.lines.length>1?'them':'it'}.`}
+ else{const want=k.lines[f];hl(want[2]);
+  if(f>=L.length)m=`Lines 1 to ${L.length} are right, but the program is not finished. Next, write the Python for the highlighted pseudocode.`;
+  else if(okLine(k,f,L[f]))m=`Line ${f+1} is right but needs ${want[1]} level${want[1]==1?'':'s'} of indentation (${want[1]*4} spaces).`;
+  else{m=`Line ${f+1}: `+typeHint(tidy(L[f],true),{a:want[0],r:want[2],full:true},k);
+   if(L.length!=k.lines.length&&f==0)m+=` (Your program has ${L.length} lines; it needs ${k.lines.length}.)`}
+  if(checks>=2&&f<L.length&&!okLine(k,f,L[f]))m+=` Clue: line ${f+1} should start with “${esc(want[0].slice(0,9))}”.`}
+ wrong(m,ed);render()}
+// --- predict the output ---
+function choose(qi,oi){const k=T[ti],s=SL[qi];if(!s||done[s.id]||locked)return;const q=k.q[qi],o=s.o[oi];
+ if(o==q.a){done[s.id]=1;right();after()}
+ else{tries[s.id]=(tries[s.id]||0)+1;wrong(`${esc(q.e)}`,null);render();shake($(`.opt[data-q="${qi}"][data-o="${oi}"]`))}}
+// --- spot the bug ---
+function clickLine(i){const k=T[ti];if(locked)return;const s=SL.find(x=>x.b.l==i);
+ if(s&&done[s.id])return;
+ if(s){pick=i;render();fb('',`Yes, line ${i+1} is wrong. Now choose the fix.`);return}
+ pick=null;tries.line=(tries.line||0)+1;let m=`Line ${i+1} is correct.`;
+ if(tries.line>=2){const left=SL.filter(x=>!done[x.id]);if(left.length)m+=` Clue: check line ${left[0].b.l+1}.`}
+ wrong(m,null);render();shake($(`[data-bl="${i}"]`))}
+function fix(j){const s=SL.find(x=>x.b.l==pick);if(!s||locked)return;const o=s.o[j];
+ if(o==s.b.a){done[s.id]=1;ORD[pick]=s.b.a;pick=null;right(esc(s.b.e));after()}
+ else{wrong(esc(s.b.o[o]||'That fix is not right.'),null);render();shake($(`.opt[data-fix="${j}"]`))}}
+// --- put lines in order ---
+function mv(i,d){if(locked)return;const j=i+d;if(j<0||j>=ORD.length)return;[ORD[i],ORD[j]]=[ORD[j],ORD[i]];ORD.forEach(o=>o.st='');render()}
+function ind(i,d){if(locked)return;ORD[i].ind=Math.max(0,Math.min(3,ORD[i].ind+d));ORD.forEach(o=>o.st='');render()}
+function checkOrder(){const k=T[ti];if(locked)return;checks++;let n=0;done={};
+ ORD.forEach((o,i)=>{const ok=o.t==k.lines[i][0]&&o.ind==k.lines[i][1];o.st=ok?'good':'wrongl';if(ok){n++;done[SL[i].id]=1}});
+ if(n==ORD.length){fb('ok',`${pav} Every line is in the right place with the right indentation!`);streak++;score+=10*ORD.length;after();return}
+ const first=ORD.findIndex((o,i)=>o.st=='wrongl'),want=k.lines[first];
+ let m=`${n} of ${ORD.length} lines are in the right place (green). Fix the red lines and check again.`;
+ const sameText=ORD[first].t==want[0];if(sameText)m+=` Line ${first+1} is the right line but needs ${want[1]} level${want[1]==1?'':'s'} of indentation.`;
+ else if(checks>=2)m+=` Clue: line ${first+1} should be “${esc('    '.repeat(want[1])+want[0])}”.`;
+ wrong(m,null);render()}
+// ================= FINISHING A LEVEL =================
+const MAXM=5,stars=m=>m==0?3:m<=2?2:1;
+function finish(){locked=true;tick();const ok=mist<=MAXM;att[ti]++;mm[ti]+=mist;if(ok&&!pon[ti])pon[ti]=att[ti];
+ if(ok){if(mist==0)score+=20;const g=score-startScore,p=best[ti]||0;best[ti]=Math.max(p,g);score=startScore+(best[ti]-p);unlocked=Math.max(unlocked,ti+1);confetti()}else score=startScore;
+ save();render();
+ setTimeout(()=>modal(ok?`<h2>Level ${ti+1} complete!</h2><p style="font-size:2rem">${'⭐'.repeat(stars(mist))}</p><p>${mist==0?'Perfect run! +20 bonus.':`Passed with ${mist} mistake${mist>1?'s':''}. Aim for none to earn the +20 bonus.`} Score: ${score}. Progress saved.</p><button class="btn" onclick="next()">${ti<T.length-1?'Next level':'Get your certificate'}</button>`:`<h2>So close!</h2><p>You made ${mist} mistakes. You can make up to ${MAXM} and still move on, so try again.</p><p>The questions are shuffled each time.</p><button class="btn" onclick="retry()">Try again</button>`),700)}
+function next(){closeM();if(ti<T.length-1){ti++;build()}else cert()}
+function retry(){closeM();score=startScore;build()}
+function go(i){if(i>unlocked||i==ti)return;if(!locked)score=startScore;ti=i;build()}
+// ================= TIMER =================
+const fmt=ms=>{const s=Math.round((ms||0)/1000);return Math.floor(s/60)+'m '+String(s%60).padStart(2,'0')+'s'};
+function tick(){const n=Date.now();if(t0){tim[curLi]+=n-t0;t0=n}}
+function pause(){tick();t0=0}
+function resume(){t0=Date.now()}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();else if($('#m').style.display!='flex')resume()});
+setInterval(()=>{$('#tm').textContent=fmt(tim[ti]+(t0&&ti==curLi?Date.now()-t0:0))},1000);
+// ================= PROGRESS REPORT AND CERTIFICATE =================
+const passedN=()=>Math.min(unlocked,T.length),sum=a=>a.reduce((x,y)=>x+(y||0),0);
+function rank(){const m=sum(mm);return m==0?'Python Master':m<=30?'Code Ace':'Python Finisher'}
+function dash(){const n=T.length,d=passedN(),
+ rows=T.map((k,i)=>`<tr><td>${i+1}. ${esc(k.t)}</td><td>${TN[k.lv]}</td><td>${TY[k.ty]}</td><td>${i<unlocked?'✓ Passed':i==unlocked?'▶ Current':'🔒 Locked'}</td><td>${att[i]}${pon[i]?` (passed on #${pon[i]})`:''}</td><td>${fmt(tim[i])}</td><td>${mm[i]}</td><td>${best[i]==null?'-':best[i]}</td></tr>`).join(''),
+ hard=T.map((k,i)=>[i,mm[i]]).sort((a,b)=>b[1]-a[1])[0],slow=T.map((k,i)=>[i,tim[i]]).sort((a,b)=>b[1]-a[1])[0],
+ tier=['LA','MA','HA'].map(t=>{const ix=T.map((k,i)=>k.lv==t?i:-1).filter(i=>i>=0);return `${TN[t]}: ${ix.filter(i=>i<unlocked).length} of ${ix.length}`}).join(' · ');
+ return `<div class="dash"><p><b>Progress: ${d} of ${n} levels passed</b> <span class="fact">(${tier})</span></p><div class="prog"><i style="width:${d/n*100}%"></i></div><div class="stats" style="justify-content:center">${[['Score',score],['Attempts',sum(att)],['Time',fmt(sum(tim))],['Mistakes',sum(mm)]].map(x=>`<div class="stat"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('')}</div><div class="tw"><table class="st"><tr><th>Level</th><th>Tier</th><th>Task</th><th>Status</th><th>Attempts</th><th>Time</th><th>Mistakes</th><th>Best</th></tr>${rows}</table></div><p class="fact">${hard[1]?`Most mistakes: Level ${hard[0]+1}, ${esc(T[hard[0]].t)}. `:''}${slow[1]?`Most time spent: Level ${slow[0]+1} (${fmt(slow[1])}).`:'Play a level to see your analysis here.'}</p></div>`}
+function summary(){tick();modal(`<h2>Progress and analysis report</h2><p>${pav} <b>${esc(pname)||'Player'}</b>${pyear?', '+esc(pyear):''}. Pseudocode to Python, IGCSE Computer Science (Edexcel 4CP0). ${new Date().toLocaleDateString()}</p>${dash()}<p class="np"><button class="btn" onclick="copyReport(this)">Copy report</button> <button class="btn alt" onclick="try{print()}catch(_){}">Print or save as PDF</button> <button class="btn alt" onclick="closeM()">Close</button></p>`)}
+function copyReport(b){const t=['Pseudocode to Python progress report',`${pname||'Player'}${pyear?', '+pyear:''}`,`Score: ${score}, ${passedN()} of ${T.length} levels passed, total time ${fmt(sum(tim))}`,'Level\tTier\tTask\tAttempts\tTime\tMistakes\tBest'].concat(T.map((k,i)=>`${i+1}. ${k.t}\t${TN[k.lv]}\t${TY[k.ty]}\t${att[i]}\t${fmt(tim[i])}\t${mm[i]}\t${best[i]==null?'-':best[i]}`)).join('\n');
+ const ok=()=>{b.textContent='Copied!';setTimeout(()=>b.textContent='Copy report',1500)};
+ try{navigator.clipboard.writeText(t).then(ok,()=>{b.textContent='Copy blocked'})}catch(_){b.textContent='Copy blocked'}}
+function cert(){confetti();modal(`<div class="cert"><h2>${pav} Certificate of Achievement</h2><p>This certifies that</p><p class="cn"><span id="cn">${esc(pname)||'your name here'}</span></p><p>${pyear?'('+esc(pyear)+') ':''}has completed all ${T.length} levels of Pseudocode to Python for IGCSE Computer Science (Edexcel 4CP0), from Beginner to Expert.</p><p>Total score: <b>${score}</b> points. Rank: <b>${rank()}</b></p>${tbl()}<p>${new Date().toLocaleDateString()}</p></div><p class="np"><input placeholder="Type your name" value="${esc(pname).replace(/"/g,'&quot;')}" oninput="pname=this.value;$('#cn').textContent=pname||'your name here';save();who()"></p><p class="np"><button class="btn" onclick="try{print()}catch(_){}">Print or save as PDF</button> <button class="btn alt" onclick="summary()">Progress report</button> <button class="btn alt" onclick="restart()">Play again</button> <button class="btn alt" onclick="closeM()">Close</button></p>`)}
+function tbl(){return `<div class="tw"><table class="st"><tr><th>Level</th><th>Tier</th><th>Best score</th></tr>`+T.map((k,i)=>`<tr><td>${i+1}. ${esc(k.t)}</td><td>${TN[k.lv]}</td><td>${best[i]!=null?best[i]+' pts':'not yet'}</td></tr>`).join('')+`</table></div>`}
+function clearProgress(){ti=0;score=0;unlocked=0;att=T.map(()=>0);mm=T.map(()=>0);best=T.map(()=>null);tim=T.map(()=>0);pon=T.map(()=>0)}
+function restart(){closeM();clearProgress();save();build()}
+// ================= PLAYER, RULES, SAVE CODE =================
+function who(){$('#who').textContent=pname?`${pav} ${pname}${pyear?', '+pyear:''}`:''}
+const AV=['🤖','🚀','🦊','🐉','🧠','⚡','🎮','🦄'],YR=['Year 9','Year 10','Year 11','Year 12','Year 13'],
+ FACTS=['In the exam, pseudocode questions use the Pearson command set, but you can answer in any valid way.','Python has no END IF or END WHILE. The indentation shows where a block ends.','<> in pseudocode means “not equal to”. Python writes it as !=.','Python is named after the comedy group Monty Python, not the snake.'];
+function welcome(){const saved=att.some(a=>a>0);
+ modal(`<h2>Pseudocode to Python</h2><p>Turn ${T.length} pseudocode algorithms into working Python, from Beginner to Expert, and earn your certificate.</p><p><button class="lnk" onclick="rules(true)">📖 Read the rules first</button></p><p>Pick your avatar:</p><div class="avs">${AV.map(a=>`<button class="av${a==pav?' on':''}" onclick="pav='${a}';welcome()">${a}</button>`).join('')}</div><p><input id="pn" placeholder="Your name" maxlength="40" value="${esc(pname).replace(/"/g,'&quot;')}" oninput="pname=this.value"><select id="py" onchange="pyear=this.value"><option value="">Year group</option>${YR.map(y=>`<option${y==pyear?' selected':''}>${y}</option>`).join('')}</select></p><p class="we" id="we"></p><p class="fact">Did you know? ${esc(FACTS[Math.floor(Math.random()*FACTS.length)])}</p><p><button class="btn" onclick="begin()">${saved?'Continue':'Start'}</button> <button class="btn alt" onclick="rules(true)">Rules</button>${saved?' <button class="btn alt" onclick="newPlayer()">New player (clears progress)</button>':''}</p>${dash()}`)}
+function begin(){pname=pname.trim();if(!pname||!pyear){$('#we').textContent='Please enter your name and choose a year group.';return}save();closeM();who()}
+function isThis(){modal(`<h2>Welcome back!</h2><p style="font-size:2.4rem;margin:4px">${pav}</p><p>Is this still <b>${esc(pname)}</b>${pyear?' ('+esc(pyear)+')':''}?</p><button class="btn" onclick="welcome()">Yes, that’s me</button> <button class="btn alt" onclick="newPlayer()">No, I’m someone else</button><p class="fact">Choosing “No” clears the saved progress on this browser and starts a new player.</p>`)}
+function newPlayer(){pname='';pyear='';pav='🤖';clearProgress();save();build();welcome()}
+function rules(back){modal(`<h2>Rules and how to play</h2><p>Drag and drop and Type the code levels show Pearson pseudocode for you to turn into Python. Predict the output, Spot the bug and Put lines in order use Python only.</p><ul><li><b>Drag and drop:</b> drag the right Python into each gap. Beginner levels fill small gaps, Intermediate complete whole lines, Expert build the whole program.</li><li><b>Type the code:</b> type the missing Python, then press Enter or ✓. Extra spaces and ' or " quotes are fine.</li><li><b>Write the program:</b> write the whole program from the pseudocode. Press Tab to indent, then Check. Each line and its indentation is checked.</li><li><b>Predict the output:</b> trace the Python program and choose what it displays.</li><li><b>Spot the bug:</b> read what the program should do, click the Python line that is wrong, then choose the fix.</li><li><b>Put lines in order:</b> read what the program should do, move the lines with ↑ ↓, indent them with ← →, then press Check.</li><li>Correct: +10 points plus streak bonuses. Wrong: −3 points and a hint.</li><li>Finish a level with <b>${MAXM} mistakes or fewer</b> to unlock the next one. No mistakes earns +20 and 3 stars.</li><li>Your attempts, mistakes and time are saved in your progress report. Press Save progress to get a code for another device.</li><li>Finish all ${T.length} levels to earn your certificate.</li></ul><button class="btn" onclick="${back?'welcome()':'closeM()'}">${back?'Back':'Close'}</button>`)}
+function saveCode(){return btoa(unescape(encodeURIComponent(JSON.stringify(data()))))}
+function saveDlg(){tick();save();modal(`<h2>Save your progress</h2><p>Your progress is saved automatically in this browser. To carry on from another device, copy this code and keep it safe.</p><textarea id="sc2" readonly rows="4" style="width:100%">${saveCode()}</textarea><p><button class="btn" onclick="cp()">Copy code</button></p><h3 style="margin:10px 0 4px">Load a saved code</h3><textarea id="lc" rows="3" style="width:100%" placeholder="Paste your code here"></textarea><p class="we" id="le"></p><p><button class="btn alt" onclick="loadCode()">Load progress</button> <button class="btn alt" onclick="closeM()">Close</button></p>`)}
+function cp(){const t=$('#sc2'),e=$('#le');t.select();const ok=()=>{e.style.color='var(--ok)';e.textContent='Code copied.'};try{navigator.clipboard.writeText(t.value).then(ok,()=>{try{document.execCommand('copy');ok()}catch(_){}})}catch(_){try{document.execCommand('copy');ok()}catch(__){}}}
+function loadCode(){const e=$('#le');e.style.color='var(--bad)';try{const d=JSON.parse(decodeURIComponent(escape(atob($('#lc').value.trim()))));
+ clearProgress();if(!apply(d))throw 0;save();t0=0;ti=Math.min(unlocked,T.length-1);build();welcome()}catch(_){e.textContent='That code did not work. Check that you copied all of it.'}}
+// ================= POP-UPS, CONFETTI, CLICKS AND DRAGGING =================
+function modal(h){pause();$('#m').innerHTML=`<div class="mc">${h}</div>`;$('#m').style.display='flex'}
+function closeM(){$('#m').style.display='none';resume()}
+function confetti(){for(let i=0;i<40;i++){const s=document.createElement('i');s.className='cf';s.style.cssText=`left:${Math.random()*100}vw;background:hsl(${Math.random()*360},80%,60%);animation-delay:${Math.random()*.4}s`;document.body.appendChild(s);setTimeout(()=>s.remove(),2600)}}
+const slotAt=e=>{const s=document.elementFromPoint(e.clientX,e.clientY),g=s&&s.closest('.gap[data-slot]');return g&&!g.classList.contains('done')?g:null};
+const clearOver=()=>document.querySelectorAll('.over').forEach(x=>x.classList.remove('over'));
+$('#chips').addEventListener('pointerdown',e=>{const c=e.target.closest('.chip');if(!c||locked)return;e.preventDefault();drag={c,x:e.clientX,y:e.clientY,moved:false,g:null};try{c.setPointerCapture(e.pointerId)}catch(_){}});
+addEventListener('pointermove',e=>{if(!drag)return;
+ if(!drag.moved&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){drag.moved=true;drag.g=drag.c.cloneNode(true);drag.g.className='chip ghost';document.body.appendChild(drag.g);drag.c.style.opacity=.3}
+ if(drag.moved){drag.g.style.left=e.clientX+'px';drag.g.style.top=e.clientY+'px';clearOver();const s=slotAt(e);if(s){s.classList.add('over');hl(s.dataset.ref)}else hl()}});
+addEventListener('pointerup',e=>{if(!drag)return;const d=drag;drag=null;d.c.style.opacity='';if(d.g)d.g.remove();clearOver();
+ if(d.moved){const s=slotAt(e);if(s)attempt(d.c.dataset.cid,s.dataset.slot);else hl()}else{sel=sel==d.c.dataset.cid?null:d.c.dataset.cid;render()}});
+addEventListener('pointercancel',()=>{if(drag){if(drag.g)drag.g.remove();drag.c.style.opacity='';drag=null;clearOver()}});
+$('#code').addEventListener('click',e=>{const t=e.target;let x;
+ if((x=t.closest('.gap[data-slot]'))&&sel)return attempt(sel,x.dataset.slot);
+ if(x=t.closest('[data-chk]'))return checkType(x.dataset.chk);
+ if(x=t.closest('[data-mv]')){const [i,d]=x.dataset.mv.split(',').map(Number);return mv(i,d)}
+ if(x=t.closest('[data-in]')){const [i,d]=x.dataset.in.split(',').map(Number);return ind(i,d)}
+ if(x=t.closest('[data-bl]'))return clickLine(+x.dataset.bl)});
+$('#code').addEventListener('keydown',e=>{const x=e.target.closest('[data-tin]');if(x&&e.key=='Enter'){e.preventDefault();checkType(x.dataset.tin);return}
+ if(e.target.id!='ed')return;const t=e.target,v=t.value,a=t.selectionStart,b=t.selectionEnd,ls=v.lastIndexOf('\n',a-1)+1;
+ const put=(txt,from,to,c)=>{t.value=v.slice(0,from)+txt+v.slice(to);t.selectionStart=t.selectionEnd=c};
+ if(e.key=='Tab'&&!e.shiftKey){e.preventDefault();put('    ',a,b,a+4)}
+ else if(e.key=='Tab'&&e.shiftKey){e.preventDefault();const n=(v.slice(ls).match(/^ {1,4}/)||[''])[0].length;if(n)put('',ls,ls+n,Math.max(ls,a-n))}
+ else if(e.key=='Enter'&&!e.ctrlKey){e.preventDefault();const line=v.slice(ls,a),ind=line.match(/^ */)[0]+(/:\s*$/.test(line)?'    ':'');put('\n'+ind,a,b,a+1+ind.length)}
+ else if(e.key=='Enter'&&e.ctrlKey){e.preventDefault();checkWrite()}});
+$('#code').addEventListener('focusin',e=>{const x=e.target.closest('[data-ref]');if(x)hl(x.dataset.ref)});
+$('#chips').addEventListener('click',e=>{const t=e.target;let x;
+ if(x=t.closest('[data-q]'))return choose(+x.dataset.q,+x.dataset.o);
+ if(x=t.closest('[data-fix]'))return fix(+x.dataset.fix);
+ if(t.closest('#chkord'))return checkOrder();
+ if(t.closest('#chkwr'))return checkWrite()});
+$('#code').addEventListener('mouseover',e=>{const s=e.target.closest('[data-ref]');hl(s?s.dataset.ref:null)});
+$('#code').addEventListener('mouseleave',()=>{if(!document.activeElement||!document.activeElement.closest||!document.activeElement.closest('#code'))hl()});
+$('#rs').onclick=()=>{if(!locked)score=startScore;build()};
+load();ti=Math.min(unlocked,T.length-1);build();if(pname)isThis();else welcome();
+</script></body></html>
